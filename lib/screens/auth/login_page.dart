@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'register_page.dart';
 
-class WelcomeBackPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _WelcomeBackPageState createState() => _WelcomeBackPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _WelcomeBackPageState extends State<WelcomeBackPage> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
 
   TextEditingController password = TextEditingController();
