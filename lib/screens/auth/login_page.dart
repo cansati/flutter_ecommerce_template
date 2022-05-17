@@ -1,7 +1,10 @@
 import 'package:ecommerce_int2/app_properties.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecommerce_int2/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:ecommerce_int2/screens/main/main_page.dart';
+import 'package:email_validator/email_validator.dart';
 
 import 'register_page.dart';
 
@@ -11,6 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final snackBar = SnackBar(
+    duration: Duration(seconds: 5),
+      content: Text('No user found!'),
+  );
+
+  final _auth = FirebaseAuth.instance;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -21,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
-      'Welcome to Shope',
+      'Welcome to eCommerce',
       style: TextStyle(
           color: Colors.white,
           fontSize: 34.0,
@@ -49,13 +58,25 @@ class _LoginPageState extends State<LoginPage> {
       right: (MediaQuery.of(context).size.width / 4) - 28,
       bottom: 40,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           // TODO: Login with firebase or API
 
-          if (_formKey.currentState!.validate()) {}
+          if (_formKey.currentState!.validate()) {
+            try {
+              final loggedUser = await _auth.signInWithEmailAndPassword(email: email.text, password: password.text);
+              if (loggedUser != null) {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => MainPage()));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            } catch(e) {
+              print(e);
+            }
+          }
           /*Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
         },
+
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
           height: 80,
