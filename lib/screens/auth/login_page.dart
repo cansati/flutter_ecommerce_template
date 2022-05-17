@@ -1,4 +1,6 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'register_page.dart';
@@ -10,15 +12,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
-
   TextEditingController password = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
-      'Welcome to eCommerce',
+      'Welcome to Shope',
       style: TextStyle(
           color: Colors.white,
           fontSize: 34.0,
@@ -35,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     Widget subTitle = Padding(
         padding: const EdgeInsets.only(right: 56.0),
         child: Text(
-          'Login to your account using\nMobile number',
+          'Login to your account using\nEmail address',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
@@ -48,8 +51,10 @@ class _LoginPageState extends State<LoginPage> {
       child: InkWell(
         onTap: () {
           // TODO: Login with firebase or API
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+
+          if (_formKey.currentState!.validate()) {}
+          /*Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -93,53 +98,72 @@ class _LoginPageState extends State<LoginPage> {
             decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 255, 255, 0.8),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    decoration: new InputDecoration(hintText: 'E-mail'),
-                    controller: email,
-                    style: TextStyle(fontSize: 16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Enter an email address';
+                        } else if (!EmailValidator.validate(value!)) {
+                          return "Enter a valid email address";
+                        }
+                      },
+                      decoration: new InputDecoration(hintText: 'E-mail'),
+                      controller: email,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    decoration: new InputDecoration(
-                        hintText: 'Password',
-                        suffixIcon: _obscurePassword
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _obscurePassword = false;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.visibility_off_outlined,
-                                  size: 20,
-                                  color: Colors.grey,
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _obscurePassword = true;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.visibility_outlined,
-                                  size: 20,
-                                  color: Colors.grey,
-                                ),
-                              )),
-                    controller: password,
-                    style: TextStyle(fontSize: 16.0),
-                    obscureText: _obscurePassword,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Alan boş olamaz";
+                        } else if (value.length < 6) {
+                          return "Parola 6 karakterden kısa olamaz";
+                        } else if (value.length > 30) {
+                          return "Parola 30 karakterden uzun olamaz";
+                        }
+                      },
+                      decoration: new InputDecoration(
+                          hintText: 'Password',
+                          suffixIcon: _obscurePassword
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword = true;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.visibility_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                )),
+                      controller: password,
+                      style: TextStyle(fontSize: 16.0),
+                      obscureText: _obscurePassword,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           loginButton,
