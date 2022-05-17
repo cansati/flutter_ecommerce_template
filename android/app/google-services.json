@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "426326110664",
+    "project_id": "ecommerce-957a2",
+    "storage_bucket": "ecommerce-957a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426326110664:android:14fa3a466f7b1b116e10fd",
+        "android_client_info": {
+          "package_name": "com.cansati.ecommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426326110664-n88hb6ipujutnetos4ac5ijnpagasf3k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp_OLglq68f7cJGF5XprQiMp65H1zmGQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426326110664-n88hb6ipujutnetos4ac5ijnpagasf3k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
