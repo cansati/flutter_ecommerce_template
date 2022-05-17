@@ -1,24 +1,24 @@
-
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:flutter/material.dart';
 
 import 'register_page.dart';
 
-class                            WelcomeBackPage extends StatefulWidget {
+class WelcomeBackPage extends StatefulWidget {
   @override
   _WelcomeBackPageState createState() => _WelcomeBackPageState();
 }
 
 class _WelcomeBackPageState extends State<WelcomeBackPage> {
-  TextEditingController email =
-      TextEditingController(text: 'example@email.com');
+  TextEditingController email = TextEditingController();
 
-  TextEditingController password = TextEditingController(text: '12345678');
+  TextEditingController password = TextEditingController();
+
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
-      'Welcome Back Roberto,',
+      'Welcome to eCommerce',
       style: TextStyle(
           color: Colors.white,
           fontSize: 34.0,
@@ -43,10 +43,11 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
         ));
 
     Widget loginButton = Positioned(
-      left: MediaQuery.of(context).size.width / 4,
+      right: (MediaQuery.of(context).size.width / 4) - 28,
       bottom: 40,
       child: InkWell(
         onTap: () {
+          // TODO: Login with firebase or API
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));
         },
@@ -88,18 +89,17 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
           Container(
             height: 160,
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+            padding: const EdgeInsets.only(left: 25.0, right: 20.0),
             decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 255, 255, 0.8),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10))),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration: new InputDecoration(hintText: 'E-mail'),
                     controller: email,
                     style: TextStyle(fontSize: 16.0),
                   ),
@@ -107,9 +107,36 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration: new InputDecoration(
+                        hintText: 'Password',
+                        suffixIcon: _obscurePassword
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscurePassword = false;
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.visibility_off_outlined,
+                                  size: 20,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscurePassword = true;
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.visibility_outlined,
+                                  size: 20,
+                                  color: Colors.grey,
+                                ),
+                              )),
                     controller: password,
                     style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
+                    obscureText: _obscurePassword,
                   ),
                 ),
               ],
@@ -149,24 +176,21 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
     );
 
     return Scaffold(
-
       body: Stack(
         children: <Widget>[
-
           Container(
             decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/background.jpg'),
-                  fit: BoxFit.cover)
-            ),
+                image: DecorationImage(
+                    image: AssetImage('assets/background.jpg'),
+                    fit: BoxFit.cover)),
           ),
           Container(
             decoration: BoxDecoration(
-                color: transparentYellow,
-
+              color: transparentYellow,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 28.0),
+            padding: const EdgeInsets.only(left: 28.0, right: 28.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

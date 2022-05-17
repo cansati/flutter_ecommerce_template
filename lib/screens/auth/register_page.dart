@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:flutter/material.dart';
 
@@ -10,13 +9,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController email =
-      TextEditingController(text: 'example@email.com');
+  TextEditingController email = TextEditingController();
 
-  TextEditingController password = TextEditingController(text: '12345678');
+  TextEditingController password = TextEditingController();
 
-  TextEditingController cmfPassword = TextEditingController(text: '12345678');
-
+  TextEditingController cmfPassword = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
 
     Widget registerButton = Positioned(
-      left: MediaQuery.of(context).size.width / 4,
+      left: (MediaQuery.of(context).size.width / 4) - 28,
       bottom: 40,
       child: InkWell(
         onTap: () {
@@ -84,18 +82,17 @@ class _RegisterPageState extends State<RegisterPage> {
           Container(
             height: 220,
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(left: 32.0, right: 12.0),
+            padding: const EdgeInsets.only(left: 25.0, right: 20.0),
             decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 255, 255, 0.8),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10))),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration: new InputDecoration(hintText: 'E-mail'),
                     controller: email,
                     style: TextStyle(fontSize: 16.0),
                   ),
@@ -103,6 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration: new InputDecoration(hintText: 'Password'),
                     controller: password,
                     style: TextStyle(fontSize: 16.0),
                     obscureText: true,
@@ -111,6 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
+                    decoration:
+                        new InputDecoration(hintText: 'Confirm Password'),
                     controller: cmfPassword,
                     style: TextStyle(fontSize: 16.0),
                     obscureText: true,
@@ -149,55 +149,50 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     return Scaffold(
-
-              body: Stack(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage('assets/background.jpg'),
-                            fit: BoxFit.cover)
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: transparentYellow,
-
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 28.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Spacer(flex:3),
-                        title,
-                        Spacer(),
-
-                        subTitle,
-                        Spacer(flex:2),
-
-                        registerForm,
-                        Spacer(flex:2),
-                        Padding(
-                            padding: EdgeInsets.only(bottom: 20), child: socialRegister)
-                      ],
-                    ),
-                  ),
-
-                  Positioned(
-                    top: 35,
-                    left: 5,
-                    child: IconButton(
-                      color: Colors.white,
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            );
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/background.jpg'),
+                    fit: BoxFit.cover)),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: transparentYellow,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 28.0, right: 28.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Spacer(flex: 3),
+                title,
+                Spacer(),
+                subTitle,
+                Spacer(flex: 2),
+                registerForm,
+                Spacer(flex: 2),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 20), child: socialRegister)
+              ],
+            ),
+          ),
+          Positioned(
+            top: 35,
+            left: 5,
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

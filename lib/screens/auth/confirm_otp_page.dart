@@ -10,11 +10,11 @@ class ConfirmOtpPage extends StatefulWidget {
 }
 
 class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
-  TextEditingController otp1 = TextEditingController(text: '1');
-  TextEditingController otp2 = TextEditingController(text: '2');
-  TextEditingController otp3 = TextEditingController(text: '3');
-  TextEditingController otp4 = TextEditingController(text: '4');
-  TextEditingController otp5 = TextEditingController(text: '5');
+  TextEditingController otp1 = TextEditingController();
+  TextEditingController otp2 = TextEditingController();
+  TextEditingController otp3 = TextEditingController();
+  TextEditingController otp4 = TextEditingController();
+  TextEditingController pinCodeTextEditingController = TextEditingController();
 
   Widget otpBox(TextEditingController otpController) {
     return Container(
@@ -29,6 +29,7 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: TextField(
+              onChanged: (value) {},
               controller: otpController,
               decoration: InputDecoration(
                   border: InputBorder.none, contentPadding: EdgeInsets.zero),
@@ -105,7 +106,7 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
       ),
     );
 
-    Widget otpCode = Container(
+/*    Widget otpCode = Container(
       padding: const EdgeInsets.only(right: 28.0),
       height: 190,
       child: Row(
@@ -114,11 +115,10 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
           otpBox(otp1),
           otpBox(otp2),
           otpBox(otp3),
-          otpBox(otp4),
-          otpBox(otp5)
+          otpBox(otp4)
         ],
       ),
-    );
+    );*/
 
     Widget resendText = Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -174,12 +174,14 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
                         padding: const EdgeInsets.only(right: 28.0),
                         child: Center(
                           child: PinCodeTextField(
-                            controller: new TextEditingController(),
+                            controller: pinCodeTextEditingController,
                             highlightColor: Colors.white,
                             highlightAnimation: true,
                             highlightAnimationBeginColor: Colors.white,
-                            highlightAnimationEndColor: Theme.of(context).primaryColor,
-                            pinTextAnimatedSwitcherDuration: Duration(milliseconds: 500),
+                            highlightAnimationEndColor:
+                                Theme.of(context).primaryColor,
+                            pinTextAnimatedSwitcherDuration:
+                                Duration(milliseconds: 500),
                             wrapAlignment: WrapAlignment.center,
                             hasTextBorderColor: Colors.transparent,
                             highlightPinBoxColor: Colors.white,
