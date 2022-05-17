@@ -1,4 +1,5 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 import 'forgot_password_page.dart';
@@ -9,10 +10,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  double _buttonMargin = 65;
+  double _containerHeight = 200;
   TextEditingController email = TextEditingController();
-
   TextEditingController password = TextEditingController();
-
   TextEditingController cmfPassword = TextEditingController();
   bool _obscurePassword = true;
 
@@ -45,11 +47,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
     Widget registerButton = Positioned(
       left: (MediaQuery.of(context).size.width / 4) - 28,
-      bottom: 40,
+      bottom: _buttonMargin,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
+          if (_formKey.currentState!.validate()) {
+            //TODO: implement firebase register functionality
+
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
+          } else {
+            setState(() {
+              _buttonMargin = 0.0;
+              _containerHeight = 260.0;
+            });
+          }
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -76,47 +87,77 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     Widget registerForm = Container(
-      height: 300,
+      height: 330,
       child: Stack(
         children: <Widget>[
           Container(
-            height: 220,
+            height: _containerHeight,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.only(left: 25.0, right: 20.0),
             decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 255, 255, 0.8),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    decoration: new InputDecoration(hintText: 'E-mail'),
-                    controller: email,
-                    style: TextStyle(fontSize: 16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Enter an email address';
+                        } else if (!EmailValidator.validate(value)) {
+                          return "Enter a valid email address";
+                        }
+                      },
+                      decoration: new InputDecoration(hintText: 'E-mail'),
+                      controller: email,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    decoration: new InputDecoration(hintText: 'Password'),
-                    controller: password,
-                    style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      decoration: new InputDecoration(hintText: 'Password'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter a password";
+                        } else if (value.length < 6) {
+                          return "Password must be longer than 6 characters";
+                        } else if (value.length > 30) {
+                          return "Password must be less than 30 characters";
+                        }
+                      },
+                      controller: password,
+                      style: TextStyle(fontSize: 16.0),
+                      obscureText: true,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    decoration:
-                        new InputDecoration(hintText: 'Confirm Password'),
-                    controller: cmfPassword,
-                    style: TextStyle(fontSize: 16.0),
-                    obscureText: true,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter a password";
+                        } else if (value.length < 6) {
+                          return "Password must be longer than 6 characters";
+                        } else if (value.length > 30) {
+                          return "Password must be less than 30 characters";
+                        } else if (password.text != value) {
+                          return "Passwords are not matching";
+                        }
+                      },
+                      decoration:
+                          new InputDecoration(hintText: 'Confirm Password'),
+                      controller: cmfPassword,
+                      style: TextStyle(fontSize: 16.0),
+                      obscureText: true,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           registerButton,

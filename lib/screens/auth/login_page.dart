@@ -14,9 +14,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  double _bottomMargin = 70.0;
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
-      content: Text('No user found!'),
+    content: Text('No user found!'),
   );
 
   final _auth = FirebaseAuth.instance;
@@ -56,27 +57,32 @@ class _LoginPageState extends State<LoginPage> {
 
     Widget loginButton = Positioned(
       right: (MediaQuery.of(context).size.width / 4) - 28,
-      bottom: 40,
+      bottom: _bottomMargin,
       child: InkWell(
         onTap: () async {
           // TODO: Login with firebase or API
-
-          if (_formKey.currentState!.validate()) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          /*if (_formKey.currentState!.validate()) {
             try {
-              final loggedUser = await _auth.signInWithEmailAndPassword(email: email.text, password: password.text);
-              if (loggedUser != null) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => MainPage()));
-              } else {
+              await _auth.signInWithEmailAndPassword(
+                  email: email.text, password: password.text);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => MainPage()));
+            } catch (e) {
+              if (e.toString() ==
+                  '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
-            } catch(e) {
-              print(e);
             }
-          }
+          } else {
+            setState(() {
+              _bottomMargin = 40.0;
+            });
+          }*/
           /*Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
         },
-
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
           height: 80,
@@ -109,11 +115,11 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget loginForm = Container(
-      height: 240,
+      height: 290,
       child: Stack(
         children: <Widget>[
           Container(
-            height: 160,
+            height: 190,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.only(left: 25.0, right: 20.0),
             decoration: BoxDecoration(
@@ -130,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Enter an email address';
-                        } else if (!EmailValidator.validate(value!)) {
+                        } else if (!EmailValidator.validate(value)) {
                           return "Enter a valid email address";
                         }
                       },
@@ -221,37 +227,37 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/background.jpg'),
-                    fit: BoxFit.cover)),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: transparentYellow,
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/background.jpg'),
+                      fit: BoxFit.cover)),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 28.0, right: 28.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Spacer(flex: 3),
-                welcomeBack,
-                Spacer(),
-                subTitle,
-                Spacer(flex: 2),
-                loginForm,
-                Spacer(flex: 2),
-                forgotPassword
-              ],
+            Container(
+              decoration: BoxDecoration(
+                color: transparentYellow,
+              ),
             ),
-          )
-        ],
-      ),
-    );
+            Padding(
+              padding: const EdgeInsets.only(left: 28.0, right: 28.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Spacer(flex: 3),
+                  welcomeBack,
+                  Spacer(),
+                  subTitle,
+                  Spacer(flex: 2),
+                  loginForm,
+                  Spacer(flex: 2),
+                  forgotPassword
+                ],
+              ),
+            )
+          ],
+        ));
   }
 }
