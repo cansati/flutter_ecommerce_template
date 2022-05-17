@@ -7,8 +7,6 @@ class FaqPage extends StatefulWidget {
   _FaqPageState createState() => _FaqPageState();
 }
 
-int xxx = 0;
-
 class _FaqPageState extends State<FaqPage> {
   List<Panel> panels = [
     Panel(
