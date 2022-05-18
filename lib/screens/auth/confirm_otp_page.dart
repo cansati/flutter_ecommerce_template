@@ -1,15 +1,24 @@
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/intro_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class ConfirmOtpPage extends StatefulWidget {
+  String phoneNumber;
+  ConfirmOtpPage({required this.phoneNumber});
+
   @override
   _ConfirmOtpPageState createState() => _ConfirmOtpPageState();
 }
 
 class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
+  final snackBar = SnackBar(
+    duration: Duration(seconds: 5),
+    content: Text('The provided phone number is not valid'),
+  );
+  FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController otp1 = TextEditingController();
   TextEditingController otp2 = TextEditingController();
   TextEditingController otp3 = TextEditingController();
@@ -39,6 +48,36 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  void initState() {
+    sendSms();
+    super.initState();
+  }
+
+  Future sendSms() async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: widget.phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.currentUser!.updatePhoneNumber(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId,
+            smsCode: pinCodeTextEditingController.text);
+
+        try {
+          await _auth.currentUser!.updatePhoneNumber(credential);
+        } catch (e) {}
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
@@ -186,12 +225,12 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
                             hasTextBorderColor: Colors.transparent,
                             highlightPinBoxColor: Colors.white,
                             autofocus: true,
-                            pinBoxHeight: 60,
-                            pinBoxWidth: 60,
+                            pinBoxHeight: MediaQuery.of(context).size.width / 8,
+                            pinBoxWidth: MediaQuery.of(context).size.width / 8,
                             pinBoxRadius: 5,
                             defaultBorderColor: Colors.transparent,
                             pinBoxColor: Color.fromRGBO(255, 255, 255, 0.8),
-                            maxLength: 4,
+                            maxLength: 6,
                           ),
                         ),
                       ),

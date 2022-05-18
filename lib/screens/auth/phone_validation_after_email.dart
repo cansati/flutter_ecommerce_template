@@ -22,6 +22,7 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
   GlobalKey prefixKey = GlobalKey();
   double prefixWidth = 0;
   bool _isEmailVerified = false;
+  String? countryCode;
 
   Widget prefix() {
     return Container(
@@ -32,6 +33,12 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
             border:
                 Border(bottom: BorderSide(color: Colors.black, width: 0.5))),
         child: CountryCodePicker(
+          onInit: (code) {
+            countryCode = code!.dialCode;
+          },
+          onChanged: (code) {
+            countryCode = code!.dialCode;
+          },
           initialSelection: 'TR',
           favorite: ['+1', 'US'],
         ));
@@ -107,8 +114,12 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
       bottom: 40,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => ConfirmOtpPage()));
+          if (phoneNumber.text.isNotEmpty) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => ConfirmOtpPage(
+                      phoneNumber: '$countryCode${phoneNumber.text}',
+                    )));
+          }
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -202,7 +213,11 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
         ));
 
     Widget thisPagesDesign = GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      onTap: () {
+        print('$countryCode${phoneNumber.text}');
+        print(_auth.currentUser!.email);
+        return FocusScope.of(context).requestFocus(new FocusNode());
+      },
       child: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -210,6 +225,7 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
         child: Container(
           decoration: BoxDecoration(color: transparentYellow),
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0.0,
@@ -221,13 +237,13 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Spacer(flex: 3),
+                      Spacer(flex: 1),
                       title,
                       Spacer(),
                       subTitle,
-                      Spacer(flex: 2),
+                      Spacer(flex: 1),
                       phoneForm,
-                      Spacer(flex: 2),
+                      Spacer(flex: 3),
                       resendAgainText
                     ],
                   ),

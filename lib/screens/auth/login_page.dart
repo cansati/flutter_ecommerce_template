@@ -1,4 +1,5 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/screens/auth/confirm_otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ecommerce_int2/firebase_options.dart';
@@ -14,7 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  double _bottomMargin = 85.0;
+  double _bottomMargin = 40.0;
   double _containerHeight = 140;
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
@@ -62,9 +63,9 @@ class _LoginPageState extends State<LoginPage> {
       child: InkWell(
         onTap: () async {
           // TODO: Login with firebase or API
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-          /*if (_formKey.currentState!.validate()) {
+          /*Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
+          if (_formKey.currentState!.validate()) {
             try {
               await _auth.signInWithEmailAndPassword(
                   email: email.text, password: password.text);
@@ -78,10 +79,10 @@ class _LoginPageState extends State<LoginPage> {
             }
           } else {
             setState(() {
-              _bottomMargin = 40.0;
-              _containerHeight = 190.0;
+              _bottomMargin = 0.0;
+              _containerHeight = 180.0;
             });
-          }*/
+          }
           /*Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
         },
@@ -115,9 +116,36 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+    Widget goToRegisterPage = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Sign up for a new account ',
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            color: Color.fromRGBO(255, 255, 255, 1),
+            fontSize: 16.0,
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          },
+          child: Text(
+            'Register!',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ],
+    );
 
     Widget loginForm = Container(
-      height: 290,
+      height: 245,
       child: Stack(
         children: <Widget>[
           Container(
@@ -209,18 +237,22 @@ class _LoginPageState extends State<LoginPage> {
             'Forgot your password? ',
             style: TextStyle(
               fontStyle: FontStyle.italic,
-              color: Color.fromRGBO(255, 255, 255, 0.5),
-              fontSize: 14.0,
+              color: Color.fromRGBO(255, 255, 255, 1),
+              fontSize: 16.0,
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) =>
+                      ConfirmOtpPage(phoneNumber: "+905464108583")));
+            },
             child: Text(
               'Reset password',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 14.0,
+                fontSize: 16.0,
               ),
             ),
           ),
@@ -254,7 +286,11 @@ class _LoginPageState extends State<LoginPage> {
                   subTitle,
                   Spacer(flex: 2),
                   loginForm,
-                  Spacer(flex: 2),
+                  Spacer(flex: 3),
+                  goToRegisterPage,
+                  Spacer(
+                    flex: 1,
+                  ),
                   forgotPassword
                 ],
               ),
