@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/intro_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,8 @@ class ConfirmOtpPage extends StatefulWidget {
 }
 
 class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
+  bool _canResendClick = false;
+  Timer? timer;
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
     content: Text('The provided phone number is not valid'),
@@ -53,8 +57,17 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
 
   @override
   void initState() {
+    setTimerAgain();
     sendSms();
     super.initState();
+  }
+
+  Future setTimerAgain() async {
+    timer = Timer.periodic(Duration(seconds: 45), (_) {
+      setState(() {
+        _canResendClick = true;
+      });
+    });
   }
 
   Future sendSms() async {
@@ -171,7 +184,15 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () async {
+            if (_canResendClick) {
+              setState(() {
+                _canResendClick = false;
+              });
+              await setTimerAgain();
+              await sendSms();
+            }
+          },
           child: Text(
             '0:39',
             style: TextStyle(

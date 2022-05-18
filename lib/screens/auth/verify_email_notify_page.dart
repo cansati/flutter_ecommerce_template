@@ -7,6 +7,8 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'confirm_otp_page.dart';
 
 class VerifyEmailNotifyPage extends StatelessWidget {
+  Function resent;
+  VerifyEmailNotifyPage({required this.resent});
   @override
   Widget build(BuildContext context) {
     Widget background = Container(
@@ -49,7 +51,7 @@ class VerifyEmailNotifyPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Didn't receive the OPT? ",
+              "Didn't receive the email? ",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: Color.fromRGBO(255, 255, 255, 0.5),
@@ -57,7 +59,7 @@ class VerifyEmailNotifyPage extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: resent(),
               child: Text(
                 'Resend again',
                 style: TextStyle(

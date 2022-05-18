@@ -213,11 +213,7 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
         ));
 
     Widget thisPagesDesign = GestureDetector(
-      onTap: () {
-        print('$countryCode${phoneNumber.text}');
-        print(_auth.currentUser!.email);
-        return FocusScope.of(context).requestFocus(new FocusNode());
-      },
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -255,6 +251,10 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
       ),
     );
 
-    return _isEmailVerified ? thisPagesDesign : VerifyEmailNotifyPage();
+    return _isEmailVerified
+        ? thisPagesDesign
+        : VerifyEmailNotifyPage(
+            resent: sendVerificationEmail,
+          );
   }
 }
