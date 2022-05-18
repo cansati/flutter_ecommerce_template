@@ -1,8 +1,11 @@
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-
+import 'package:ecommerce_int2/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:ecommerce_int2/screens/main/main_page.dart';
 import 'forgot_password_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -10,9 +13,14 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final snackBar = SnackBar(
+    duration: Duration(seconds: 5),
+    content: Text('No user found!'),
+  );
   final _formKey = GlobalKey<FormState>();
   double _buttonMargin = 65;
   double _containerHeight = 200;
+  final _auth = FirebaseAuth.instance;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController cmfPassword = TextEditingController();
@@ -49,10 +57,26 @@ class _RegisterPageState extends State<RegisterPage> {
       left: (MediaQuery.of(context).size.width / 4) - 28,
       bottom: _buttonMargin,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+
           if (_formKey.currentState!.validate()) {
             //TODO: implement firebase register functionality
-
+            if (_formKey.currentState!.validate()) {
+                try {
+                  await _auth.createUserWithEmailAndPassword(email:email.text, password: password.text);
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => MainPage()));
+                } catch (e) {
+                  if (e.toString() ==
+                      '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }
+              } else {
+                setState(() {
+                  _buttonMargin = 40.0;
+                });
+              }
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
           } else {

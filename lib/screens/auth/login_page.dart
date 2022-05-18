@@ -63,25 +63,25 @@ class _LoginPageState extends State<LoginPage> {
           // TODO: Login with firebase or API
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-          /*if (_formKey.currentState!.validate()) {
-            try {
-              await _auth.signInWithEmailAndPassword(
-                  email: email.text, password: password.text);
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => MainPage()));
-            } catch (e) {
-              if (e.toString() ==
-                  '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            }
-          } else {
-            setState(() {
-              _bottomMargin = 40.0;
-            });
-          }*/
-          /*Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
+          // if (_formKey.currentState!.validate()) {
+          //   try {
+          //     await _auth.signInWithEmailAndPassword(
+          //         // email: email.text, password: password.text);
+          //     // Navigator.of(context)
+          //         .push(MaterialPageRoute(builder: (_) => MainPage()));
+          //   } catch (e) {
+          //     if (e.toString() ==
+          //         '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
+          //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //     }
+          //   }
+          // } else {
+          //   setState(() {
+          //     _bottomMargin = 40.0;
+          //   });
+          // }
+          // Navigator.of(context)
+          //     .push(MaterialPageRoute(builder: (_) => RegisterPage()));
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
