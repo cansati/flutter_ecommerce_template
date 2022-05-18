@@ -180,11 +180,11 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Alan boş olamaz";
+                          return "Enter a password";
                         } else if (value.length < 6) {
-                          return "Parola 6 karakterden kısa olamaz";
+                          return "Password must be longer than 6 characters";
                         } else if (value.length > 30) {
-                          return "Parola 30 karakterden uzun olamaz";
+                          return "Password must be less than 30 characters";
                         }
                       },
                       decoration: new InputDecoration(
