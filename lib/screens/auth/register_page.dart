@@ -1,4 +1,6 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/screens/auth/confirm_otp_page.dart';
+import 'package:ecommerce_int2/screens/auth/phone_validation_after_email.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_int2/firebase_options.dart';
@@ -59,24 +61,17 @@ class _RegisterPageState extends State<RegisterPage> {
       bottom: _buttonMargin,
       child: InkWell(
         onTap: () async {
+          //TODO: implement firebase register functionality
           if (_formKey.currentState!.validate()) {
-            //TODO: implement firebase register functionality
-            if (_formKey.currentState!.validate()) {
-              try {
-                await _auth.createUserWithEmailAndPassword(
-                    email: email.text, password: password.text);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => MainPage()));
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            } else {
-              setState(() {
-                _buttonMargin = 40.0;
-              });
+            try {
+              await _auth.createUserWithEmailAndPassword(
+                  email: email.text, password: password.text);
+
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => PhoneValidationAfterEmail()));
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
           } else {
             setState(() {
               _buttonMargin = 0.0;
