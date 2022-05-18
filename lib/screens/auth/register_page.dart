@@ -15,7 +15,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
-    content: Text('No user found!'),
+    content: Text('An error occured!'),
   );
   final _formKey = GlobalKey<FormState>();
   double _buttonMargin = 65;
@@ -24,7 +24,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController cmfPassword = TextEditingController();
-  bool _obscurePassword = true;
+  bool _obscurePassword1 = true;
+  bool _obscurePassword2 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -58,25 +59,22 @@ class _RegisterPageState extends State<RegisterPage> {
       bottom: _buttonMargin,
       child: InkWell(
         onTap: () async {
-
           if (_formKey.currentState!.validate()) {
             //TODO: implement firebase register functionality
             if (_formKey.currentState!.validate()) {
-                try {
-                  await _auth.createUserWithEmailAndPassword(email:email.text, password: password.text);
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => MainPage()));
-                } catch (e) {
-                  if (e.toString() ==
-                      '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                }
-              } else {
-                setState(() {
-                  _buttonMargin = 40.0;
-                });
+              try {
+                await _auth.createUserWithEmailAndPassword(
+                    email: email.text, password: password.text);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => MainPage()));
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
+            } else {
+              setState(() {
+                _buttonMargin = 40.0;
+              });
+            }
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
           } else {
@@ -144,7 +142,33 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: TextFormField(
-                      decoration: new InputDecoration(hintText: 'Password'),
+                      decoration: new InputDecoration(
+                          hintText: 'Password',
+                          suffixIcon: _obscurePassword1
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword1 = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword1 = true;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.visibility_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                )),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Enter a password";
@@ -152,11 +176,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           return "Password must be longer than 6 characters";
                         } else if (value.length > 30) {
                           return "Password must be less than 30 characters";
+                        } else if (cmfPassword.text != value) {
+                          return "Passwords are not matching";
                         }
                       },
                       controller: password,
                       style: TextStyle(fontSize: 16.0),
-                      obscureText: true,
+                      obscureText: _obscurePassword1,
                     ),
                   ),
                   Padding(
@@ -173,11 +199,36 @@ class _RegisterPageState extends State<RegisterPage> {
                           return "Passwords are not matching";
                         }
                       },
-                      decoration:
-                          new InputDecoration(hintText: 'Confirm Password'),
+                      decoration: new InputDecoration(
+                          hintText: 'Confirm Password',
+                          suffixIcon: _obscurePassword2
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword2 = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscurePassword2 = true;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.visibility_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                )),
                       controller: cmfPassword,
                       style: TextStyle(fontSize: 16.0),
-                      obscureText: true,
+                      obscureText: _obscurePassword2,
                     ),
                   ),
                 ],
@@ -214,6 +265,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(

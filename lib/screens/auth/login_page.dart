@@ -14,7 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  double _bottomMargin = 70.0;
+  double _bottomMargin = 85.0;
+  double _containerHeight = 140;
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
     content: Text('No user found!'),
@@ -63,25 +64,26 @@ class _LoginPageState extends State<LoginPage> {
           // TODO: Login with firebase or API
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => RegisterPage()));
-          // if (_formKey.currentState!.validate()) {
-          //   try {
-          //     await _auth.signInWithEmailAndPassword(
-          //         // email: email.text, password: password.text);
-          //     // Navigator.of(context)
-          //         .push(MaterialPageRoute(builder: (_) => MainPage()));
-          //   } catch (e) {
-          //     if (e.toString() ==
-          //         '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
-          //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //     }
-          //   }
-          // } else {
-          //   setState(() {
-          //     _bottomMargin = 40.0;
-          //   });
-          // }
-          // Navigator.of(context)
-          //     .push(MaterialPageRoute(builder: (_) => RegisterPage()));
+          /*if (_formKey.currentState!.validate()) {
+            try {
+              await _auth.signInWithEmailAndPassword(
+                  email: email.text, password: password.text);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => MainPage()));
+            } catch (e) {
+              if (e.toString() ==
+                  '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            }
+          } else {
+            setState(() {
+              _bottomMargin = 40.0;
+              _containerHeight = 190.0;
+            });
+          }*/
+          /*Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RegisterPage()));*/
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -119,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Stack(
         children: <Widget>[
           Container(
-            height: 190,
+            height: _containerHeight,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.only(left: 25.0, right: 20.0),
             decoration: BoxDecoration(
