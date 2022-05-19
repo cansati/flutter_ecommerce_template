@@ -18,6 +18,8 @@ class ConfirmOtpPage extends StatefulWidget {
 class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
   bool _canResendClick = false;
   Timer? timer;
+  Timer? timer1;
+  int? secondsInt = 45;
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
     content: Text('The provided phone number is not valid'),
@@ -62,12 +64,26 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
     super.initState();
   }
 
+  Future setSecondsTimer() async {
+    timer1 = Timer.periodic(Duration(seconds: 1), (_) {
+      if (!_canResendClick) {
+        setState(() {
+          if (secondsInt! > 0) secondsInt = secondsInt! - 1;
+        });
+      } else {
+        timer1?.cancel();
+      }
+    });
+    setSecondsTimer();
+  }
+
   Future setTimerAgain() async {
     timer = Timer.periodic(Duration(seconds: 45), (_) {
       setState(() {
         _canResendClick = true;
       });
     });
+    setSecondsTimer();
   }
 
   Future sendSms() async {
@@ -92,6 +108,12 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -194,7 +216,7 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
             }
           },
           child: Text(
-            '0:39',
+            secondsInt.toString(),
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

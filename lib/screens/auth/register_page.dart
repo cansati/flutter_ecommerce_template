@@ -132,6 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       decoration: new InputDecoration(hintText: 'E-mail'),
                       controller: email,
                       style: TextStyle(fontSize: 16.0),
+                      keyboardType: TextInputType.emailAddress,
                     ),
                   ),
                   Padding(

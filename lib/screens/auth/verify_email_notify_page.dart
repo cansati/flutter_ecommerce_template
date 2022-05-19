@@ -7,7 +7,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'confirm_otp_page.dart';
 
 class VerifyEmailNotifyPage extends StatelessWidget {
-  Function resent;
+  Function() resent;
   VerifyEmailNotifyPage({required this.resent});
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class VerifyEmailNotifyPage extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: resent(),
+              onTap: resent,
               child: Text(
                 'Resend again',
                 style: TextStyle(
