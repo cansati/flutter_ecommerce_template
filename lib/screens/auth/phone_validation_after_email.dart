@@ -52,7 +52,11 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
 
   @override
   void initState() {
+    print("1");
+    print(_isEmailVerified);
     _isEmailVerified = _auth.currentUser!.emailVerified;
+    print("2");
+    print(_isEmailVerified);
     if (!_isEmailVerified) {
       sendVerificationEmail();
       timer = Timer.periodic(Duration(seconds: 3), (_) => checkEmailVerified());
@@ -69,6 +73,8 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
   Future checkEmailVerified() async {
     await _auth.currentUser!.reload();
     setState(() {
+      print("3");
+      print(_isEmailVerified);
       _isEmailVerified = _auth.currentUser!.emailVerified;
     });
     if (_isEmailVerified) timer?.cancel();
@@ -185,33 +191,6 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
       ),
     );
 
-    Widget resendAgainText = Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "Didn't receive the OPT? ",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Color.fromRGBO(255, 255, 255, 0.5),
-                fontSize: 14.0,
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Text(
-                'Resend again',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-          ],
-        ));
-
     Widget thisPagesDesign = GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Container(
@@ -240,7 +219,6 @@ class _PhoneValidationAfterEmailState extends State<PhoneValidationAfterEmail> {
                       Spacer(flex: 1),
                       phoneForm,
                       Spacer(flex: 3),
-                      resendAgainText
                     ],
                   ),
                 )

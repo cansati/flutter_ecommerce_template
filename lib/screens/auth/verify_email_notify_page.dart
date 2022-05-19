@@ -11,6 +11,7 @@ class VerifyEmailNotifyPage extends StatelessWidget {
   VerifyEmailNotifyPage({required this.resent});
   @override
   Widget build(BuildContext context) {
+
     Widget background = Container(
       decoration: BoxDecoration(
         image: DecorationImage(

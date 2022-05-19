@@ -72,8 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ForgotPasswordPage()));
           } else {
             setState(() {
               _buttonMargin = 0.0;

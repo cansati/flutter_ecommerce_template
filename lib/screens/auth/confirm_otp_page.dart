@@ -15,12 +15,12 @@ class ConfirmOtpPage extends StatefulWidget {
   _ConfirmOtpPageState createState() => _ConfirmOtpPageState();
 }
 
-class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProviderStateMixin {
+class _ConfirmOtpPageState extends State<ConfirmOtpPage>
+    with TickerProviderStateMixin {
   AnimationController? controller;
+
   bool _canResendClick = false;
   Timer? timer;
-  Timer? timer1;
-  int? secondsInt = 45;
   final snackBar = SnackBar(
     duration: Duration(seconds: 5),
     content: Text('The provided phone number is not valid'),
@@ -60,7 +60,6 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProvid
 
   @override
   void initState() {
-
     controller = AnimationController(
       duration: Duration(seconds: 45),
       vsync: this,
@@ -70,26 +69,12 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProvid
     super.initState();
     controller?.forward();
     controller?.addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller?.repeat();
-        } else if (status == AnimationStatus.dismissed) {
-          controller?.forward();
-        }
-      });
-
-  }
-
-  Future setSecondsTimer() async {
-    timer1 = Timer.periodic(Duration(seconds: 1), (_) {
-      if (!_canResendClick) {
-        setState(() {
-          if (secondsInt! > 0) secondsInt = secondsInt! - 1;
-        });
-      } else {
-        timer1?.cancel();
-      }
+      if (status == AnimationStatus.completed) {
+        controller?.dispose();
+      } /*else if (status == AnimationStatus.dismissed) {
+        controller?.forward();
+      }*/
     });
-    setSecondsTimer();
   }
 
   Future setTimerAgain() async {
@@ -98,7 +83,6 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProvid
         _canResendClick = true;
       });
     });
-    setSecondsTimer();
   }
 
   Future sendSms() async {
@@ -128,6 +112,7 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProvid
   @override
   void dispose() {
     timer?.cancel();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -230,12 +215,35 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProvid
               await sendSms();
             }
           },
-          child: Text(
-            controller!.value.toString(),
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14.0,
+          child: TweenAnimationBuilder(
+            builder: (context, second, child) {
+              return second != 0
+                  ? Text(
+                      "0:${second.toString().padLeft(2, '0')}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                      ),
+                    )
+                  : Text(
+                      "Resend",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                      ),
+                    );
+            },
+            tween: IntTween(begin: 45, end: 0),
+            duration: Duration(seconds: 45),
+            child: Text(
+              "",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14.0,
+              ),
             ),
           ),
         ),
