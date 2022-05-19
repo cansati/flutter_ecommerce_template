@@ -10,11 +10,13 @@ class ForgotPasswordPage extends StatefulWidget {
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
 
+
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController phoneNumber = TextEditingController();
 
   GlobalKey prefixKey = GlobalKey();
   double prefixWidth = 0;
+
 
   Widget prefix() {
     return Container(
@@ -29,6 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           favorite: ['+1', 'US'],
         ));
   }
+
 
   @override
   Widget build(BuildContext context) {

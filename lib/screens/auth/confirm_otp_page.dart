@@ -15,7 +15,8 @@ class ConfirmOtpPage extends StatefulWidget {
   _ConfirmOtpPageState createState() => _ConfirmOtpPageState();
 }
 
-class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
+class _ConfirmOtpPageState extends State<ConfirmOtpPage> with SingleTickerProviderStateMixin {
+  AnimationController? controller;
   bool _canResendClick = false;
   Timer? timer;
   Timer? timer1;
@@ -59,9 +60,23 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
 
   @override
   void initState() {
+
+    controller = AnimationController(
+      duration: Duration(seconds: 45),
+      vsync: this,
+    );
     setTimerAgain();
     sendSms();
     super.initState();
+    controller?.forward();
+    controller?.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller?.repeat();
+        } else if (status == AnimationStatus.dismissed) {
+          controller?.forward();
+        }
+      });
+
   }
 
   Future setSecondsTimer() async {
@@ -216,7 +231,7 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
             }
           },
           child: Text(
-            secondsInt.toString(),
+            controller!.value.toString(),
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
